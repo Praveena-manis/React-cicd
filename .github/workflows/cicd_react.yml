@@ -1,39 +1,36 @@
-name:React CI/CD
+name: React CI/CD
 
 on:
-    push:
-        branches:
-             -main
-    pull_request:
-        branches:
-             -main
-jobs:
-    build-and-test:
-        runs-on: ubuntu-latest
+  push:
+    branches:
+      - main
 
-        steps:
-        #Step 1 Checkout repository
-        -name: Checkout repository
-         uses: actions/checkout@v4
-        #Step 2 Setup a Nodejs Environment
-        -name: Setup a Node JS
-         uses: actions/setup-node@v2
-        #Step 3 Install Dependencies
-        -name: Install Dependencies
-         run: npm install
-        #Step 4 Run Test Cases
-        -name: Run Tests
-         run: npm test
-        #Step 5 Build
-        -name: Build the app
-         run: |
-          npm run build
-          sleep 5 # Temporary Delay
-        -name: Check build directory
-         run: ls -la build
-        #Deploy
-        -name: Deploy to GitHub Pages
-         uses: peaceiris/actions-gh-pages@v3
-         with:
-           github_token: ${{secrets.GITHUB_TOKEN}}
-           publish_dir: build
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+
+    - name: Install Dependencies
+      run: npm install
+
+    - name: Run Tests
+      run: npm test
+
+    - name: Build React App
+      run: npm run build
+
+    - name: Deploy to Netlify
+      uses: nwtgck/actions-netlify@v2.0
+      with:
+        publish-dir: ./build
+        production-deploy: true
+        NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+        NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
