@@ -3,7 +3,7 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
 export default defineConfig({
-  base:'https:github.com/Praveena-manis/React-cicd.git',
+  base:'/React-cicd.git/',
   plugins: [react()],
   test: {
     globals: true,
